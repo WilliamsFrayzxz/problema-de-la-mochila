@@ -1,0 +1,48 @@
+class MochilaObjeto:
+    def __init__(self, peso, valor, indice):
+        self.indice = indice
+        self.peso = peso
+        self.valor = valor
+        self.relacion = valor // peso  # Calculamos la relación valor/peso y la almacenamos en el atributo "relacion"
+
+    # Función para la comparación entre dos MochilaObjeto
+    # Comparamos la relación calculada para ordenarlos
+    def __lt__(self, otro):
+        return self.relacion < otro.relacion  # Definimos el criterio de comparación basado en el atributo "relacion"
+
+
+def llenarMochila(pesos, valores, capacidad):
+    listaOrdenada = []
+    for i in range(len(pesos)):
+        listaOrdenada.append(MochilaObjeto(pesos[i], valores[i], i))
+
+    # Ordenar los elementos de la mochila por su relación (valor/peso) de mayor a menor
+    listaOrdenada.sort(reverse=True)
+
+    objetosSeleccionados = []  # Lista para almacenar los objetos seleccionados.
+    valorTotal = 0  # Contador para almacenar el valor total de los objetos en la mochila
+    
+    print('Objetos ordenados de mayor a menor de acuerdo a su relación:')
+    for obj in listaOrdenada:
+        print(f'Objeto {obj.indice}; Peso: {obj.peso}; Valor: {obj.valor}; Relación: {obj.relacion}')
+        pesoActual = int(obj.peso)
+        valorActual = int(obj.valor)
+        if capacidad - pesoActual >= 0:  # Si el peso del objeto cabe en la mochila
+            objetosSeleccionados.append(obj)  # Agregamos el objeto a la lista de objetos seleccionados.
+            capacidad -= pesoActual  # Restamos el peso del objeto a la capacidad restante de la mochila.
+            valorTotal += valorActual  # Sumamos el valor del objeto al contador de valor total.
+        else:
+            break  # Salimos del bucle cuando los objetos restantes no quepan en la mochila.
+
+    # Impresión de resultados
+    print('Mochila Llena')
+    for obj in objetosSeleccionados:
+        print(f'Objeto {obj.indice}; Peso: {obj.peso}; Valor: {obj.valor}; Relación: {obj.relacion}')
+    print(f'Valor Máximo: {valorTotal}')
+    print(f'Capacidad restante: {capacidad}')
+
+
+pesos = [2, 7, 4, 3, 6]
+valores = [20, 70, 30, 40, 80]
+capacidad = 15
+llenarMochila(pesos, valores, capacidad)
